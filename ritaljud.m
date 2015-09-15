@@ -1,23 +1,36 @@
 %%Ritaljud 
 
-[x,fs]=audioread('1000Hz.wav');
+clc, clear
 
+[y,fs]=audioread('1000Hz.wav');
 
-x = x(:,1);             % get the first channel
-xmax = max(abs(x));     % find the maximum value
-x = x/xmax;             % scalling the signal
+ydft = fft(y); %fft to transform the original signal into frequency domain
+n = length (y); %length of the original signal
+% y has even length
+ydft = ydft(1:length(y)/2+1);
+% create a frequency vector
+freq = 0:fs/length(y):fs/2;
+shiftfreq = fftshift(freq);
 
-% time & discretisation parameters
-N = length(x);
-t = (0:N-1)/fs;       
+%plot original signal in time domain;
+figure;
+plot ((1:n)/fs, y);
+title('1000Hz.wav in time domain');
+xlabel ('second');
+grid on;
 
-% plotting of the waveform
-figure(1)
-plot(t, x, 'r')
-xlim([0 max(t)])
-ylim([-1.1*max(abs(x)) 1.1*max(abs(x))])
-grid on
-set(gca, 'FontName', 'Times New Roman', 'FontSize', 14)
-xlabel('Time, s')
-ylabel('Normalized amplitude')
-title('The signal in the time domain')
+% plot magnitude in frequency domain
+figure;
+plot(freq,abs(ydft));
+title('1000Hz.wav in frequency domain');
+xlabel ('Hz');
+ylabel('Magnitude');
+grid on;
+
+% plot phase in frequency domain
+figure;
+plot(freq,unwrap(angle(ydft)));
+title ('1000Hz.wav in frequency domain');
+xlabel ('Hz');
+ylabel ('Phase');
+grid on; 
