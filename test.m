@@ -8,3 +8,4 @@ figure(1)
 magx=abs(fft(x));               
 ssf=(0:N/2-1)/(Ts*N);             
 plot(ssf,magx(1:N/2))
+
