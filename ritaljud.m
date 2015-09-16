@@ -48,7 +48,8 @@ grid on;
 %gångra med.
 radius= ymax*1000;
 
-for freq = (0:fs/length(y):fs/2);
+
+for freq = ((0:fs/length(y):fs/2)/(fs*0.001)+1)*4;   % La till detta: /(fs*0.001)+1)*4
 if freq>=500 && freq<1000
     color = '.k'; %Vet dock inte hur man får en string to string eller vad det blir...
 
@@ -69,7 +70,7 @@ figure;
 %Plotta en fylld cirkel
 plot(1, 1, color, 'MarkerSize', radius) %(1,1) avgör koordinaten. 
 
-freq
+
 %Frekvens färg:
 
 %500-1000 Svart '.k'
@@ -77,42 +78,22 @@ freq
 %1500-2000 Grön '.g'
 %2000-2500 Blå '.b'
 
-%Ett försök till att få frekvensen att bli ett värde (funkar ej)
-%frekvens=int32(freq);
-
-
 %%
+clear, clc, close all; 
+%Pick color from spectrum
 
-%Testar att sätta frekvensen till ett värde
-frekvens= 1600;
+%   Vi vill att:
+% 1.Vi får en frekvens från det uppspelade ljudet. 
+% 2.Beroende på frekvens väljer vi en pixel i x-led på 600 pixlar
+%   För att göra detta måste vi normalisera så att frekvensens spektrum
+%   anpassar sig med antalet pixlar. 
+% 3.När pixeln är vald vill vi veta vilken färg pixeln har. 
+% 4.Sedan vill vi applicera denna färg på cirkeln.
 
+%[RGB, c, r] = imread('spectrum_chart.jpg'); %RGB-bilden, c-columns, r-rows
 
-%Och här nedan försökte jag få en viss färg på pricken beroende på
-%frekvensen. 
-
-if frekvens>=500 && frekvens<1000
-    color = '.k' %Vet dock inte hur man får en string to string eller vad det blir...
-
-elseif frekvens>=1000 && frekvens<1500
-    color = '.r'; 
-
-elseif frekvens>=1500 && frekvens<2000
-    color = '.g'; 
-
-elseif frekvens>=2000 && frekvens<2500
-    color = '.b';
-
-else
-    color = '.m'; %random färg för att se om det funkar (magenta). 
-    end
-    
-figure;
-%Plotta en svart fylld cirkel
-plot(1, 1, color, 'MarkerSize', radius) %(1,1) avgör koordinaten. 
-
-%Såhär skriver man för att få en röd cirkel:
-%plot(1, 1, '.r', 'MarkerSize', radius)
-
-
+%c = [12 12];
+%r = [12 12];
+%pixels = impixel(RGB);
 
 
