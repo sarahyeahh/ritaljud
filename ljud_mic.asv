@@ -1,4 +1,4 @@
-%Spela in ett ljud, plotta och spela upp
+%Spela in ett ljud och 
 
 recObj = audiorecorder(44100, 16, 2);
 
@@ -12,5 +12,4 @@ play(recObj);
 
 y = getaudiodata(recObj);
 
-%plotta ljudet
 plot(y);
