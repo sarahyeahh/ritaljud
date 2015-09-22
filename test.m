@@ -1,3 +1,6 @@
+clear all;
+close all;
+
 f='1000Hz.wav';              
 [x,sr]=wavread(f) ;    
 Ts=1/sr;                         
@@ -33,6 +36,7 @@ Blue = im(:,:,3);
 [i j] = find( sqrt((double(Red) - R).^2 + (double(Green) - G).^2 + (double(Blue) - B).^2) <= COLORTOLERANCE );
 
 %%
+
 im = imread('spectrum_chart.jpg');
 h = image(im);
 
