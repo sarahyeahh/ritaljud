@@ -3,6 +3,7 @@ clear, clc, close all
 
 % get a section of the sound file
 [x,fs] = wavread('1000Hz.wav');
+%record audio use 
 x = x(:,1);             % get the first channel
 xmax = max(abs(x));     % find the maximum value
 x = x/xmax;             % scalling the signal

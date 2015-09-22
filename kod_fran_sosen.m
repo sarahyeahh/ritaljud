@@ -37,30 +37,12 @@ plot (y);
 
 %Dela upp signalen i intervall för varje ton
 y1 = y(1:1100);
-y2 = y(1200:2300);
-y3 = y(2400:3400);
-y4 = y(3600:4600);
-y5 = y(4800:5800);
-y6 = y(6000:7000);
-y7 = y(7200:8200);
 
 %Fouriertransformera signalen för varje ton i telefonnumret
 Y1 = fft(y1);
-Y2 = fft(y2);
-Y3 = fft(y3);
-Y4 = fft(y4);
-Y5 = fft(y5);
-Y6 = fft(y6);
-Y7 = fft(y7);
 
 %Skapa en frekvensaxel med korrekt delning (steg)
 f1 = 0:(fs/length(Y1)):(fs/2);
-f2 = 0:(fs/length(Y2)):(fs/2);
-f3 = 0:(fs/length(Y3)):(fs/2);
-f4 = 0:(fs/length(Y4)):(fs/2);
-f5 = 0:(fs/length(Y5)):(fs/2);
-f6 = 0:(fs/length(Y6)):(fs/2);
-f7 = 0:(fs/length(Y7)):(fs/2);
 
 %Antal frekvenssteg för varje ton
 M = 350;
@@ -68,15 +50,3 @@ M = 350;
 %Plotta tonerna/signalerna
 figure;
 plot(f1(1:M),abs(Y1(1:M)));
-figure;
-plot(f2(1:M),abs(Y2(1:M)));
-figure;
-plot(f3(1:M),abs(Y3(1:M)));
-figure;
-plot(f4(1:M),abs(Y4(1:M)));
-figure;
-plot(f5(1:M),abs(Y5(1:M)));
-figure;
-plot(f6(1:M),abs(Y6(1:M)));
-figure;
-plot(f7(1:M),abs(Y7(1:M)));
