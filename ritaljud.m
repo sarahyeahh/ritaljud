@@ -90,6 +90,13 @@ clear, clc, close all;
 % 3.När pixeln är vald vill vi veta vilken färg pixeln har. 
 % 4.Sedan vill vi applicera denna färg på cirkeln.
 
+A=imread('spectrum_chart.jpg');
+image(A)
+[x,y]=ginput(1); %En funktion som väljer en pixel och ger koordinat. (vi vill ju göra tvärtom!)
+                 %Siffran i parantesen betyderhur många värden man vill ha 
+
+                 
+% Några andra testfunktioner:               
 %[RGB, c, r] = imread('spectrum_chart.jpg'); %RGB-bilden, c-columns, r-rows
 
 %c = [12 12];
