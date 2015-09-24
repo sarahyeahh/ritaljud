@@ -4,7 +4,7 @@ clc, clear
 
 %dBFS Ändrar amplituden tror jag. 
 
-[y,fs]=audioread('2000Hz-6.wav');
+[y,fs]=audioread('1000Hz.wav');
 
 y = y(:,1);             % get the first channel
 ymax = max(abs(y));     % find the maximum value

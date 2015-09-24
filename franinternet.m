@@ -2,7 +2,7 @@
 clear, clc, close all
 
 % get a section of the sound file
-[x,fs] = wavread('1000Hz.wav');
+[x,fs] = audioread('1000Hz.wav');
 %record audio use 
 x = x(:,1);             % get the first channel
 xmax = max(abs(x));     % find the maximum value
@@ -50,7 +50,7 @@ X = 20*log10(X);        % spectrum magnitude
 
 % plotting of the spectrum
 figure;
-semilogx(f, X, 'r')
+semilogx(f, X, 'r') % f=frekvens, x=magnitude
 xlim([0 max(f)])
 grid on
 set(gca, 'FontName', 'Times New Roman', 'FontSize', 14)

@@ -2,7 +2,7 @@
 clear, clc, close all
 
 % get a section of the sound file
-[x,fs] = wavread('1000Hz.wav');
+[x,fs] = audioread('1000Hz.wav');
 
 %record audio use 
 x = x(:,1);             % get the first channel

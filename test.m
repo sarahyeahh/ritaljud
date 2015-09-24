@@ -2,7 +2,7 @@ clear all;
 close all;
 
 f='1000Hz.wav';              
-[x,sr]=wavread(f) ;    
+[x,sr]=audioread(f) ;    
 Ts=1/sr;                         
 N=2^15;
 x=x(1:N)';                   

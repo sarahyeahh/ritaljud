@@ -1,4 +1,4 @@
-%Spela in ett ljud, plotta och spela upp
+%Spela in ett ljud, spela upp och plotta
 
 recObj = audiorecorder(44100, 16, 2);
 
