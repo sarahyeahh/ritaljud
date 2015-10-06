@@ -91,7 +91,7 @@ hObject = audiorecorder(44100, 16, 1);
 
 %record your voice for 5 seconds 
 disp('Start speaking.')
-recordblocking(hObject, 5);
+recordblocking(hObject, 3);
 disp('End of Recording.');
 
 %play back the recording
