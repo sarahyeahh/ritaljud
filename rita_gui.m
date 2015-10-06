@@ -22,7 +22,7 @@ function varargout = rita_gui(varargin)
 
 % Edit the above text to modify the response to help rita_gui
 
-% Last Modified by GUIDE v2.5 02-Oct-2015 10:37:00
+% Last Modified by GUIDE v2.5 02-Oct-2015 11:11:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -80,16 +80,30 @@ function Untitled_1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in recordbutton.
+function recordbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to recordbutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%Spela in ett ljud, spela upp och plotta
+hObject = audiorecorder(44100, 16, 1);
 
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
+%record your voice for 5 seconds 
+disp('Start speaking.')
+recordblocking(hObject, 5);
+disp('End of Recording.');
+
+%play back the recording
+play(hObject);
+
+y = getaudiodata(hObject);
+
+
+
+% --- Executes on button press in stopbutton.
+function stopbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to stopbutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -131,3 +145,4 @@ function listbox2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
