@@ -58,11 +58,6 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-% add some additional data as a new field called numberOfErrors
-handles.numberOfErrors = 0;
-% Save the change you made to the structure
-guidata(hObject,handles)
-
 
 % UIWAIT makes rita_gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
