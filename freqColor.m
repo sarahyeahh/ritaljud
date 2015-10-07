@@ -3,6 +3,7 @@ close all, clear all
 
 
 [y,fs] = audioread( '2000Hz.wav');
+plot(y);
 
 soundsc(y, fs); %spelar upp ljudet
 L = length(y); %längden av vektorn y

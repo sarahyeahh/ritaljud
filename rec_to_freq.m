@@ -3,37 +3,51 @@ close all, clear all
 
 
 %Spela in ett ljud, spela upp och plotta
-
 recObj = audiorecorder(44100, 16, 2);
 
 %record your voice for 5 seconds 
 disp('Start speaking.')
-recordblocking(recObj, 3);
+recordblocking(recObj, 2);
 disp('End of Recording.');
 
 %play back the recording
 play(recObj);
 
-y = getaudiodata(recObj);
+y = getaudiodata(recObj); %Create an array that stores the recorded signal values.
 
 %plotta ljudet
+figure;
 plot(y);
 
 %[y,fs] = audioread( '1000Hz.wav');
 fs = 44100;
-
 %soundsc(y, fs); %spelar upp ljudet
 L = length(y); %längden av vektorn y
 
-[maxValue,indexMax] = max(abs(fft(y:2-mean(y:2)))); %fft
-freq = indexMax * fs / L;
+
+z = [];
+x = [];
+for i=1:L
+    if ((y(i) < 0.1) && (y(i) > -0.1))
+        z(end+1)=y(i);
+    else
+        x(end+1)=y(i);
+    end
+end
+figure;
+plot(x);
+ 
+%vad händer här?!?!!!
+[maxValue,indexMax] = max(abs(fft(x))); %fft
+freq = indexMax * fs / length(x);
 
 %Rita cirklar med olika radier beroende på amplitud. 
-radius= maxValue*100;
+radius= 100;
 
-if freq>=500 && freq<1000
-    color = '.k'; 
-    
+if freq>=100 && freq<500
+    color = '.y'; 
+elseif freq>=500 && freq<1000
+    color = '.r';  
 elseif freq>=1000 && freq<1500
     color = '.r'; 
 
