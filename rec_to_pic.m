@@ -81,14 +81,23 @@ RGB(:,:,3) = 0*myimage1(:,:,3);
 figure
 imshow(RGB); %röd bild
 
-%Gör bilden svartvit
-BW= rgb2gray(myimage1);
-figure
-imshow(BW);
-
 HSV= rgb2hsv(myimage1);
 % "20% more" saturation:
-HSV(:, :, 2) = HSV(:, :, 2) * 1.2;
+
+if freq>=100 && freq<500
+    HSV(:, :, 2) = HSV(:, :, 2) * 0; 
+elseif freq>=500 && freq<1000
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.5;  
+elseif freq>=1000 && freq<1500
+    HSV(:, :, 2) = HSV(:, :, 2) * 1;
+elseif freq>=1500 && freq<2000
+   HSV(:, :, 2) = HSV(:, :, 2) * 1.5;
+elseif freq>=2000 && freq<2500
+    HSV(:, :, 2) = HSV(:, :, 2) * 2;
+else
+    HSV(:, :, 2) = HSV(:, :, 2) * 5; 
+end
+   
 HSV(HSV > 1) = 1;  % Limit values
 RGB2 = hsv2rgb(HSV);
 figure
