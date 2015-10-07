@@ -4,11 +4,11 @@ close all, clear all
 
 %Spela in ett ljud, spela upp och plotta
 
-recObj = audiorecorder(44100, 16, 1);
+recObj = audiorecorder(44100, 16, 2);
 
 %record your voice for 5 seconds 
 disp('Start speaking.')
-recordblocking(recObj, 5);
+recordblocking(recObj, 3);
 disp('End of Recording.');
 
 %play back the recording
@@ -25,11 +25,11 @@ fs = 44100;
 %soundsc(y, fs); %spelar upp ljudet
 L = length(y); %längden av vektorn y
 
-[maxValue,indexMax] = max(abs(fft(y-mean(y)))); %fft
+[maxValue,indexMax] = max(abs(fft(y:2-mean(y:2)))); %fft
 freq = indexMax * fs / L;
 
 %Rita cirklar med olika radier beroende på amplitud. 
-radius= maxValue*10;
+radius= maxValue*100;
 
 if freq>=500 && freq<1000
     color = '.k'; 
