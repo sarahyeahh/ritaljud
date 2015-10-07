@@ -22,7 +22,7 @@ function varargout = rita_gui(varargin)
 
 % Edit the above text to modify the response to help rita_gui
 
-% Last Modified by GUIDE v2.5 07-Oct-2015 09:25:14
+% Last Modified by GUIDE v2.5 07-Oct-2015 16:15:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -112,9 +112,15 @@ L = length(y); %längden av vektorn y
 freq = indexMax * fs / L;
 
 %Rita cirklar med olika radier beroende på amplitud. 
-radius= maxValue;
+radius = maxValue/10;
 
-if freq>=500 && freq<1000
+    if freq<200
+       color = '.c'; 
+       
+elseif freq>=200 && freq<500
+    color = '.y'; 
+
+elseif freq>=500 && freq<1000
     color = '.k'; 
     
 elseif freq>=1000 && freq<1500
@@ -135,6 +141,13 @@ axes(handles.axes1);
 plot(y);
 axes(handles.axes2);
 plot(1, 1, color, 'MarkerSize', radius);
+
+%Skriver ut frekvensen
+output = freq;
+set(handles.edit1,'string',output);
+%Skriver ut amplituden
+output = maxValue;
+set(handles.edit2,'string',output);
 
 
 % --- Executes on button press in stopbutton.
@@ -183,6 +196,52 @@ function listbox2_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
