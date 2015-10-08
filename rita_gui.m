@@ -149,11 +149,11 @@ HSV= rgb2hsv(myimage1);
 if freq>=100 && freq<500
     HSV(:, :, 2) = HSV(:, :, 2) * 0; 
 elseif freq>=500 && freq<1000
-    HSV(:, :, 2) = HSV(:, :, 2) * 0.5;  
+    HSV(:, :, 2) = HSV(:, :, 2) * 1;  
 elseif freq>=1000 && freq<1500
-    HSV(:, :, 2) = HSV(:, :, 2) * 1;
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.4;
 elseif freq>=1500 && freq<2000
-   HSV(:, :, 2) = HSV(:, :, 2) * 1.5;
+   HSV(:, :, 2) = HSV(:, :, 2) * 1.7;
 elseif freq>=2000 && freq<2500
     HSV(:, :, 2) = HSV(:, :, 2) * 2;
 else
@@ -161,21 +161,19 @@ else
 end
 
 %changes lightness
-if radius>=100 && radius<500
+if maxValue>=100 && maxValue<1000
     Value = 0; %svart bild
-elseif radius>=500 && radius<1000
+elseif maxValue>=1000 && maxValue<2000
     Value = 0.4;   
-elseif radius>=1000 && radius<1500
+elseif maxValue>=2000 && maxValue<3000
     Value = 0.8 
-elseif radius>=1500 && radius<2000
-   Value = 1.2; 
-elseif radius>=2000 && radius<2500
-   Value = 1.6; 
+elseif maxValue>=3000 && maxValue<4000
+   Value = 1; 
+elseif maxValue>=4000 && maxValue<5000
+   Value = 1.4; 
 else
    Value = 2; %vit bild
 end
-
-Value=2;
    
 HSV(HSV > 1) = 1;  % Limit values
 RGB2 = hsv2rgb(HSV)*Value;
@@ -206,7 +204,6 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate axes1
 
-
 % --- Executes during object creation, after setting all properties.
 function axes2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to axes1 (see GCBO)
@@ -230,32 +227,6 @@ function axes4_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: place code in OpeningFcn to populate axes1
-
-
-
-
-% --- Executes on selection change in listbox2.
-function listbox2_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox2
-[y,fs]=audioread('1000Hz.wav');
-
-
-% --- Executes during object creation, after setting all properties.
-function listbox2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
 
 function edit1_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
