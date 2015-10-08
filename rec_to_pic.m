@@ -42,7 +42,7 @@ plot(x);
 freq = indexMax * fs / length(x);
 
 %Rita cirklar med olika radier beroende på amplitud. 
-radius= 100;
+radius= maxValue/10;
 
 if freq>=100 && freq<500
     color = '.y'; 
@@ -82,8 +82,7 @@ figure
 imshow(RGB); %röd bild
 
 HSV= rgb2hsv(myimage1);
-% "20% more" saturation:
-
+%change saturation:
 if freq>=100 && freq<500
     HSV(:, :, 2) = HSV(:, :, 2) * 0; 
 elseif freq>=500 && freq<1000
@@ -97,8 +96,22 @@ elseif freq>=2000 && freq<2500
 else
     HSV(:, :, 2) = HSV(:, :, 2) * 5; 
 end
-   
+
+%changes lightness
+if radius>=100 && radius<500
+    Value = 0; 
+elseif radius>=500 && radius<1000
+    Value = 0.4;   
+elseif radius>=1000 && radius<1500
+    Value = 0.8; 
+elseif radius>=1500 && radius<2000
+   Value = 1.2; 
+elseif radius>=2000 && radius<2500
+   Value = 1.6; 
+else
+   Value = 2; 
+end
 HSV(HSV > 1) = 1;  % Limit values
 RGB2 = hsv2rgb(HSV);
 figure
-imshow(RGB2);
+imshow(RGB2*Value);
