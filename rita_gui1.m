@@ -22,7 +22,7 @@ function varargout = rita_gui(varargin)
 
 % Edit the above text to modify the response to help rita_gui
 
-% Last Modified by GUIDE v2.5 08-Oct-2015 16:38:12
+% Last Modified by GUIDE v2.5 07-Oct-2015 16:15:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,7 +54,6 @@ function rita_gui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for rita_gui
 handles.output = hObject;
-
 
 % Update handles structure
 guidata(hObject, handles);
@@ -106,95 +105,57 @@ y = getaudiodata(hObject);
 %[y,fs] = audioread( '1000Hz.wav');
 fs = 44100;
 
+%soundsc(y, fs); %spelar upp ljudet
 L = length(y); %längden av vektorn y
-
-%tar bort de låga frekvensern
-z = [];
-x = [];
-for i=1:L
-    if ((y(i) < 0.1) && (y(i) > -0.1))
-        z(end+1)=y(i);
-    else
-        x(end+1)=y(i);
-    end
-end
 
 [maxValue,indexMax] = max(abs(fft(y-mean(y)))); %fft
 freq = indexMax * fs / L;
 
 %Rita cirklar med olika radier beroende på amplitud. 
-radius = maxValue/10;
+radius = maxValue/50;
 
-if freq<200
-       color = '.c';       
+    if freq<200
+       color = '.c'; 
+       
 elseif freq>=200 && freq<500
     color = '.y'; 
+
 elseif freq>=500 && freq<1000
-    color = '.k';    
+    color = '.k'; 
+    
 elseif freq>=1000 && freq<1500
     color = '.r'; 
+
 elseif freq>=1500 && freq<2000
     color = '.g'; 
+
 elseif freq>=2000 && freq<2500
     color = '.b';
+
 else
     color = '.m'; %random färg för att se om det funkar (magenta). 
-end
-  
-%BILDEN: axes3
-myimage1 = imread('Fosseboll.jpg');
-
-HSV= rgb2hsv(myimage1);
-% changes saturation:
-if freq>=100 && freq<500
-    HSV(:, :, 2) = HSV(:, :, 2) * 0; 
-elseif freq>=500 && freq<1000
-    HSV(:, :, 2) = HSV(:, :, 2) * 1;  
-elseif freq>=1000 && freq<1500
-    HSV(:, :, 2) = HSV(:, :, 2) * 1.4;
-elseif freq>=1500 && freq<2000
-   HSV(:, :, 2) = HSV(:, :, 2) * 1.7;
-elseif freq>=2000 && freq<2500
-    HSV(:, :, 2) = HSV(:, :, 2) * 2;
-else
-    HSV(:, :, 2) = HSV(:, :, 2) * 5; 
-end
-
-%changes lightness
-if maxValue>=100 && maxValue<1000
-    Value = 0; %svart bild
-elseif maxValue>=1000 && maxValue<2000
-    Value = 0.4;   
-elseif maxValue>=2000 && maxValue<3000
-    Value = 0.8 
-elseif maxValue>=3000 && maxValue<4000
-   Value = 1; 
-elseif maxValue>=4000 && maxValue<5000
-   Value = 1.4; 
-else
-   Value = 2; %vit bild
-end
-   
-HSV(HSV > 1) = 1;  % Limit values
-RGB2 = hsv2rgb(HSV)*Value;
-% Slut på kod till axes3!
-
+    end
+    
 %Hanterar två figurer samtidigt
 axes(handles.axes1);
-plot(x);
+plot(y);
 axes(handles.axes2);
 plot(1, 1, color, 'MarkerSize', radius);
-axes(handles.axes3);
-imshow(RGB2);
-axes(handles.axes4);
-imshow(myimage1);
 
 %Skriver ut frekvensen
 output = freq;
 set(handles.edit1,'string',output);
 %Skriver ut amplituden
-output1 = maxValue;
-set(handles.edit2,'string',output1);
+output = maxValue;
+set(handles.edit2,'string',output);
+
+
+% --- Executes on button press in stopbutton.
+function stopbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to stopbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
 % --- Executes during object creation, after setting all properties.
 function axes1_CreateFcn(hObject, eventdata, handles)
@@ -204,6 +165,7 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate axes1
 
+
 % --- Executes during object creation, after setting all properties.
 function axes2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to axes1 (see GCBO)
@@ -212,21 +174,34 @@ function axes2_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate axes1
 
+
+
+
+
+% --- Executes on selection change in listbox2.
+function listbox2_Callback(hObject, eventdata, handles)
+% hObject    handle to listbox2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox2
+[y,fs]=audioread('1000Hz.wav');
+
+
 % --- Executes during object creation, after setting all properties.
-function axes3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to axes1 (see GCBO)
+function listbox2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listbox2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: place code in OpeningFcn to populate axes1
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
-% --- Executes during object creation, after setting all properties.
-function axes4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to axes1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: place code in OpeningFcn to populate axes1
 
 function edit1_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)

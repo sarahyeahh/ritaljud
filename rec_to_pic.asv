@@ -44,6 +44,31 @@ freq = indexMax * fs / length(x);
 %Rita cirklar med olika radier beroende på amplitud. 
 radius= 100;
 
+myimage1 = imread('Fosseboll.jpg');
+figure
+imshow(myimage1);
+
+myimage2 =double((myimage1)/255);%normera bilden
+figure %tecknad bild
+imshow(myimage2);
+
+figure
+myimage3 = double(myimage1)/255;
+imshow(myimage3);
+
+%visa bildens röda kanal
+RGB(:,:,1)= myimage1(:,:,1);
+RGB(:,:,2) = 0*myimage1(:,:,2);
+RGB(:,:,3) = myimage1(:,:,3);
+figure
+imshow(RGB); %röd bild
+
+%Gör bilden svart
+myimageBW = rgb2hsv(myimage1);
+figure
+imshow(myimageBW(:1));
+
+
 if freq>=100 && freq<500
     color = '.y'; 
 elseif freq>=500 && freq<1000
