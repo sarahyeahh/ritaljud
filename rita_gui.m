@@ -22,7 +22,7 @@ function varargout = rita_gui(varargin)
 
 % Edit the above text to modify the response to help rita_gui
 
-% Last Modified by GUIDE v2.5 08-Oct-2015 16:38:12
+% Last Modified by GUIDE v2.5 11-Oct-2015 10:33:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -108,71 +108,77 @@ fs = 44100;
 
 L = length(y); %längden av vektorn y
 
-%tar bort de låga frekvensern
-z = [];
-x = [];
-for i=1:L
-    if ((y(i) < 0.1) && (y(i) > -0.1))
-        z(end+1)=y(i);
-    else
-        x(end+1)=y(i);
-    end
-end
-
 [maxValue,indexMax] = max(abs(fft(y-mean(y)))); %fft
-freq = indexMax * fs / L;
+freq = 2*indexMax * fs / L;
 
 %Rita cirklar med olika radier beroende på amplitud. 
 radius = maxValue/10;
-
-if freq<200
-       color = '.c';       
-elseif freq>=200 && freq<500
-    color = '.y'; 
-elseif freq>=500 && freq<1000
-    color = '.k';    
-elseif freq>=1000 && freq<1500
-    color = '.r'; 
-elseif freq>=1500 && freq<2000
-    color = '.g'; 
-elseif freq>=2000 && freq<2500
-    color = '.b';
-else
-    color = '.m'; %random färg för att se om det funkar (magenta). 
-end
   
 %BILDEN: axes3
 myimage1 = imread('Fosseboll.jpg');
 
 HSV= rgb2hsv(myimage1);
 % changes saturation:
-if freq>=100 && freq<500
-    HSV(:, :, 2) = HSV(:, :, 2) * 0; 
-elseif freq>=500 && freq<1000
-    HSV(:, :, 2) = HSV(:, :, 2) * 1;  
-elseif freq>=1000 && freq<1500
+if freq>=600 && freq<900
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.4;
+    mess = 'Mycket högre frekvens tack';
+elseif freq>=900 && freq<1200
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.6;  
+    mess = 'Lagom mer frekvens tack';
+elseif freq>=1200 && freq<1500
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.8;
+    mess = 'Lite högre frekvens tack';
+elseif freq>=1500 && freq<1800
+   HSV(:, :, 2) = HSV(:, :, 2) * 1;
+   mess = 'Perfekt frekvens!';
+elseif freq>=1800 && freq<2100
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.2;
+    mess = 'Lite lägre frekvens tack';
+elseif freq>=2100 && freq<2500
     HSV(:, :, 2) = HSV(:, :, 2) * 1.4;
-elseif freq>=1500 && freq<2000
-   HSV(:, :, 2) = HSV(:, :, 2) * 1.7;
-elseif freq>=2000 && freq<2500
-    HSV(:, :, 2) = HSV(:, :, 2) * 2;
+    mess = 'Lagom lägre frekvens tack';
+elseif freq>=1800 && freq<2100
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.2;
+    mess = 'Mycket lägre frekvens tack';
 else
     HSV(:, :, 2) = HSV(:, :, 2) * 5; 
+    mess = 'Helt fel, försök igen';
 end
 
 %changes lightness
-if maxValue>=100 && maxValue<1000
+if maxValue<=100
     Value = 0; %svart bild
-elseif maxValue>=1000 && maxValue<2000
-    Value = 0.4;   
-elseif maxValue>=2000 && maxValue<3000
-    Value = 0.8 
-elseif maxValue>=3000 && maxValue<4000
+    mess2 = 'Tyst som en mus';
+elseif maxValue>=100 && maxValue<800
+    Value = 0.2; 
+    mess2 = 'Sa du något?';
+elseif maxValue>=800 && maxValue<1000
+    Value = 0.4 
+    mess2 = 'Höj volymen mycket!';
+elseif maxValue>=1000 && maxValue<1200
+   Value = 0.6; 
+   mess2 = 'Högre Volym vore bra';
+elseif maxValue>=1200 && maxValue<1400
+   Value = 0.8; 
+   mess2 = 'Höj volymen en aning';
+elseif maxValue>=1400 && maxValue<1600
    Value = 1; 
-elseif maxValue>=4000 && maxValue<5000
-   Value = 1.4; 
+   mess2 = 'Perfekt volym!';
+elseif maxValue>=1600 && maxValue<1800
+    Value = 1.2; 
+    mess2 = 'Sänk volymen en aning';
+elseif maxValue>=2000 && maxValue<2200
+    Value = 1.4 
+    mess2 = 'Sänk volymen';
+elseif maxValue>=2200 && maxValue<2400
+   Value = 1.6; 
+   mess2 = 'Alldeles för hög volym, tänk på grannarna';
+elseif maxValue>=2400 && maxValue<3000
+   Value = 1.8; 
+   mess2 = 'Sluta SKRIK!';
 else
    Value = 2; %vit bild
+   mess2 = 'Jag fick precis tinitus :(';
 end
    
 HSV(HSV > 1) = 1;  % Limit values
@@ -180,21 +186,16 @@ RGB2 = hsv2rgb(HSV)*Value;
 % Slut på kod till axes3!
 
 %Hanterar två figurer samtidigt
-axes(handles.axes1);
-plot(x);
-axes(handles.axes2);
-plot(1, 1, color, 'MarkerSize', radius);
 axes(handles.axes3);
 imshow(RGB2);
 axes(handles.axes4);
 imshow(myimage1);
 
 %Skriver ut frekvensen
-output = freq;
-set(handles.edit1,'string',output);
+set(handles.edit1,'string',mess); 
 %Skriver ut amplituden
-output1 = maxValue;
-set(handles.edit2,'string',output1);
+set(handles.edit2,'string',mess2);
+
 
 % --- Executes during object creation, after setting all properties.
 function axes1_CreateFcn(hObject, eventdata, handles)
