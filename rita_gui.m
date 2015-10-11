@@ -119,12 +119,15 @@ myimage1 = imread('Fosseboll.jpg');
 
 HSV= rgb2hsv(myimage1);
 % changes saturation:
-if freq>=600 && freq<900
-    HSV(:, :, 2) = HSV(:, :, 2) * 0.4;
+if freq>=300 && freq<600
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.2;
     mess = 'Mycket högre frekvens tack';
+elseif freq>=600 && freq<900
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.4;  
+    mess = 'Öka frekvens en hel del';
 elseif freq>=900 && freq<1200
     HSV(:, :, 2) = HSV(:, :, 2) * 0.6;  
-    mess = 'Lagom mer frekvens tack';
+    mess = 'Mer frekvens vore bra';
 elseif freq>=1200 && freq<1500
     HSV(:, :, 2) = HSV(:, :, 2) * 0.8;
     mess = 'Lite högre frekvens tack';
@@ -136,9 +139,12 @@ elseif freq>=1800 && freq<2100
     mess = 'Lite lägre frekvens tack';
 elseif freq>=2100 && freq<2500
     HSV(:, :, 2) = HSV(:, :, 2) * 1.4;
-    mess = 'Lagom lägre frekvens tack';
+    mess = 'Sänk frekvens tack';
 elseif freq>=1800 && freq<2100
-    HSV(:, :, 2) = HSV(:, :, 2) * 1.2;
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.6;
+    mess = 'Ta det lugnt med frekvens';
+elseif freq>=2100 && freq<2400
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.8;
     mess = 'Mycket lägre frekvens tack';
 else
     HSV(:, :, 2) = HSV(:, :, 2) * 5; 
