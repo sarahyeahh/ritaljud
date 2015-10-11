@@ -22,7 +22,7 @@ function varargout = rita_gui(varargin)
 
 % Edit the above text to modify the response to help rita_gui
 
-% Last Modified by GUIDE v2.5 02-Oct-2015 11:11:10
+% Last Modified by GUIDE v2.5 11-Oct-2015 10:33:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,13 +55,9 @@ function rita_gui_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for rita_gui
 handles.output = hObject;
 
+
 % Update handles structure
 guidata(hObject, handles);
-
-% add some additional data as a new field called numberOfErrors
-handles.numberOfErrors = 0;
-% Save the change you made to the structure
-guidata(hObject,handles)
 
 
 % UIWAIT makes rita_gui wait for user response (see UIRESUME)
@@ -98,39 +94,113 @@ hObject = audiorecorder(44100, 16, 1);
 
 %record your voice for 5 seconds 
 disp('Start speaking.')
-recordblocking(hObject, 5);
+recordblocking(hObject, 3);
 disp('End of Recording.');
 
 %play back the recording
 play(hObject);
 
 y = getaudiodata(hObject);
+%Plot sker längst ned
 
-%plotta ljudet
-plot(y);
+%[y,fs] = audioread( '1000Hz.wav');
+fs = 44100;
 
+L = length(y); %längden av vektorn y
 
+[maxValue,indexMax] = max(abs(fft(y-mean(y)))); %fft
+freq = 2*indexMax * fs / L;
 
+%Rita cirklar med olika radier beroende på amplitud. 
+radius = maxValue/10;
+  
+%BILDEN: axes3
+myimage1 = imread('Fosseboll.jpg');
 
+HSV= rgb2hsv(myimage1);
+% changes saturation:
+if freq>=300 && freq<600
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.2;
+    mess = 'Mycket högre frekvens tack';
+elseif freq>=600 && freq<900
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.4;  
+    mess = 'Öka frekvens tack';
+elseif freq>=900 && freq<1200
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.6;  
+    mess = 'Mer frekvens tack';
+elseif freq>=1200 && freq<1500
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.8;
+    mess = 'Lite högre frekvens tack';
+elseif freq>=1500 && freq<1800
+   HSV(:, :, 2) = HSV(:, :, 2) * 1;
+   mess = 'Perfekt frekvens!';
+elseif freq>=1800 && freq<2100
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.2;
+    mess = 'Lite lägre frekvens tack';
+elseif freq>=2100 && freq<2500
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.4;
+    mess = 'Sänk frekvens tack';
+elseif freq>=1800 && freq<2100
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.6;
+    mess = 'Ta det lugnt med frekvens';
+elseif freq>=2100 && freq<2400
+    HSV(:, :, 2) = HSV(:, :, 2) * 1.8;
+    mess = 'Mycket lägre frekvens tack';
+else
+    HSV(:, :, 2) = HSV(:, :, 2) * 5; 
+    mess = 'Helt fel, försök igen';
+end
 
-% --- Executes on button press in stopbutton.
-function stopbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to stopbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+%changes lightness
+if maxValue<=100
+    Value = 0; %svart bild
+    mess2 = 'Tyst som en mus';
+elseif maxValue>=100 && maxValue<800
+    Value = 0.2; 
+    mess2 = 'Sa du något?';
+elseif maxValue>=800 && maxValue<1000
+    Value = 0.4 
+    mess2 = 'Höj volymen mycket!';
+elseif maxValue>=1000 && maxValue<1200
+   Value = 0.6; 
+   mess2 = 'Högre Volym vore bra';
+elseif maxValue>=1200 && maxValue<1400
+   Value = 0.8; 
+   mess2 = 'Höj volymen en aning';
+elseif maxValue>=1400 && maxValue<1600
+   Value = 1; 
+   mess2 = 'Perfekt volym!';
+elseif maxValue>=1600 && maxValue<1800
+    Value = 1.2; 
+    mess2 = 'Sänk volymen en aning';
+elseif maxValue>=2000 && maxValue<2200
+    Value = 1.4 
+    mess2 = 'Sänk volymen';
+elseif maxValue>=2200 && maxValue<2400
+   Value = 1.6; 
+   mess2 = 'Alldeles för hög volym, tänk på grannarna';
+elseif maxValue>=2400 && maxValue<3000
+   Value = 1.8; 
+   mess2 = 'Sluta SKRIK!';
+else
+   Value = 2; %vit bild
+   mess2 = 'Jag fick precis tinitus :(';
+end
+   
+HSV(HSV > 1) = 1;  % Limit values
+RGB2 = hsv2rgb(HSV)*Value;
+% Slut på kod till axes3!
 
-% No need to call guidata to obtain a structure;
-% it is provided by GUIDE via the handles argument
-handles.numberOfErrors = handles.numberOfErrors + 1;
-% save the changes to the structure
-guidata(hObject,handles)
+%Hanterar två figurer samtidigt
+axes(handles.axes3);
+imshow(RGB2);
+axes(handles.axes4);
+imshow(myimage1);
 
-
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+%Skriver ut frekvensen
+set(handles.edit1,'string',mess); 
+%Skriver ut amplituden
+set(handles.edit2,'string',mess2);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -141,33 +211,70 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate axes1
 
-y = getaudiodata(hObject);
-
-%plotta ljudet
-plot(y);
-
-
-
-% --- Executes on selection change in listbox2.
-function listbox2_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox2
-[y,fs]=audioread('1000Hz.wav');
-
-
 % --- Executes during object creation, after setting all properties.
-function listbox2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox2 (see GCBO)
+function axes2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
+% Hint: place code in OpeningFcn to populate axes1
+
+% --- Executes during object creation, after setting all properties.
+function axes3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes1
+
+% --- Executes during object creation, after setting all properties.
+function axes4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes1
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
