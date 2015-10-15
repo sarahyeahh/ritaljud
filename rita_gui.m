@@ -119,7 +119,10 @@ myimage1 = imread('Fosseboll.jpg');
 
 HSV= rgb2hsv(myimage1);
 % changes saturation:
-if freq>=300 && freq<600
+if freq<=300
+    HSV(:, :, 2) = HSV(:, :, 2) * 0.001;
+    mess = 'Helt fel, för låg frekvens!';
+elseif freq>=300 && freq<600
     HSV(:, :, 2) = HSV(:, :, 2) * 0.2;
     mess = 'Mycket högre frekvens tack';
 elseif freq>=600 && freq<900
@@ -148,7 +151,7 @@ elseif freq>=2100 && freq<2400
     mess = 'Mycket lägre frekvens tack';
 else
     HSV(:, :, 2) = HSV(:, :, 2) * 5; 
-    mess = 'Helt fel, försök igen';
+    mess = 'Helt fel, för hög frekvens!';
 end
 
 %changes lightness
